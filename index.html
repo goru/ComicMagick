@@ -46,6 +46,30 @@
             </div>
             <p><small class="text-muted"></small></p>
 
+            <div class="form-check ">
+              <input id="normalize-checkbox" class="form-check-input" type="checkbox">
+              <label class="form-check-label" for="normalize-checkbox">
+                <span class="navbar-text">ノーマライズ</span>
+              </label>
+            </div>
+            <p><small class="text-muted"></small></p>
+
+            <div class="form-check ">
+              <input id="level-checkbox" class="form-check-input" type="checkbox">
+              <label class="form-check-label" for="level-checkbox">
+                <span class="navbar-text">レベル補正</span>
+              </label>
+            </div>
+            <p><small class="text-muted"></small></p>
+
+            <div class="form-check ">
+              <input id="gamma-checkbox" class="form-check-input" type="checkbox">
+              <label class="form-check-label" for="gamma-checkbox">
+                <span class="navbar-text">ガンマ補正</span>
+              </label>
+            </div>
+            <p><small class="text-muted"></small></p>
+
             <p><small class="text-muted"></small></p>
             <div class="form-check ">
               <input id="extent-checkbox" class="form-check-input" type="checkbox">
@@ -67,7 +91,7 @@
               <span class="input-group-text btn-sm">前処理</span>
               <input id="preprocess-input" type="text" class="form-control form-control-sm">
             </div>
-            <p class="card-text"><small class="text-muted">自動で生成されるオプションの前にこの入力が追加されます。ImageMagickのオプションを直接入力します。</small></p>
+            <p class="card-text"><small class="text-muted">生成されるオプションの前にこの入力が追加されます。ImageMagickのオプションを直接入力します。</small></p>
 
           </div>
         </div>
@@ -144,11 +168,49 @@
               </label>
             </div>
             <p class="card-text"><small class="text-muted">表紙を見た時に背表紙がどちら側で綴じられているかを設定します。</small></p>
+          </div>
+        </div>
 
-            <div class="d-grid mt-2">
-              <button id="grayscale-button" type="button" class="btn btn-sm btn-primary">全て"グレースケール"にする</button>
+        <div class="card mt-2">
+          <div class="card-header">
+            補正
+          </div>
+          <div class="card-body">
+            <p class="card-text"><small><i class="bi bi-arrow-clockwise"></i>をクリックすると全てのページで設定が有効になります。ページ個別の設定で有効無効を切り替えることができます。</small></p>
+
+            <div class="input-group mt-2">
+              <span class="input-group-text btn-sm form-control from-control-sm">グレースケール</span>
+              <button id="grayscale-button" class="btn btn-sm btn-primary" type="button">
+                <i class="bi bi-arrow-clockwise"></i>
+              </button>
             </div>
-            <p class="card-text"><small class="text-muted">全てのページを"グレースケール"に設定します。ページ個別の設定で有効無効を切り替えることができます。</small></p>
+            <p class="card-text"><small class="text-muted"></small></p>
+
+            <div class="input-group mt-2">
+              <span class="input-group-text btn-sm form-control from-control-sm">ノーマライズ</span>
+              <button id="normalize-button" class="btn btn-sm btn-primary" type="button">
+                <i class="bi bi-arrow-clockwise"></i>
+              </button>
+            </div>
+            <p class="card-text"><small class="text-muted"></small></p>
+
+            <div class="input-group mt-2">
+              <span class="input-group-text btn-sm">レベル補正</span>
+              <input id="level-input" type="text" class="form-control form-control-sm" value="10%,90%">
+              <button id="level-button" class="btn btn-sm btn-primary" type="button">
+                <i class="bi bi-arrow-clockwise"></i>
+              </button>
+            </div>
+            <p class="card-text"><small class="text-muted"></small></p>
+
+            <div class="input-group mt-2">
+              <span class="input-group-text btn-sm">ガンマ補正</span>
+              <input id="gamma-input" type="text" class="form-control form-control-sm" value="0.5">
+              <button id="gamma-button" class="btn btn-sm btn-primary" type="button">
+                <i class="bi bi-arrow-clockwise"></i>
+              </button>
+            </div>
+            <p class="card-text"><small class="text-muted"></small></p>
           </div>
         </div>
 
@@ -158,6 +220,7 @@
           </div>
           <div class="card-body">
             <p class="card-text"><small>全画面に表示した時にページ間で縮尺が異なる状態にならないように、表紙と裏表紙以外のページに余白を追加してページのサイズを揃えます。ページ個別の設定で有効無効を切り替えることができます。</small></p>
+
             <div class="input-group mt-2">
               <input id="extent-width-input" type="text" class="form-control form-control-sm">
               <span class="input-group-text btn-sm">x</span>
@@ -270,6 +333,9 @@
         this.optimizedId = '';
 
         this.grayscale = false;
+        this.normalize = false;
+        this.level = false;
+        this.gamma = false;
         this.extent = false;
         this.spread = false;
         this.preprocess = '';
@@ -515,6 +581,12 @@
 
       let grayscaleCheckbox = document.getElementById('grayscale-checkbox');
       grayscaleCheckbox.checked = page.grayscale;
+      let normalizeCheckbox = document.getElementById('normalize-checkbox');
+      normalizeCheckbox.checked = page.normalize;
+      let levelCheckbox = document.getElementById('level-checkbox');
+      levelCheckbox.checked = page.level;
+      let gammaCheckbox = document.getElementById('gamma-checkbox');
+      gammaCheckbox.checked = page.gamma;
       let extentCheckbox = document.getElementById('extent-checkbox');
       extentCheckbox.checked = page.extent;
       let spreadCheckbox = document.getElementById('spread-checkbox');
@@ -524,6 +596,9 @@
 
       document.getElementById('page-config-save').onclick = () => {
         page.grayscale = grayscaleCheckbox.checked;
+        page.normalize = normalizeCheckbox.checked;
+        page.level = levelCheckbox.checked;
+        page.gamma = gammaCheckbox.checked;
         page.extent = extentCheckbox.checked;
         page.spread = spreadCheckbox.checked;
         page.preprocess = preprocessInput.value;
@@ -539,6 +614,8 @@
 
     let getOptimizeCommand = (page) => {
       let bindingRight = document.getElementById("binding-right-radio").checked;
+      let levelValue = document.getElementById("level-input").value;
+      let gammaValue = document.getElementById("gamma-input").value;
       let extentWidth = document.getElementById("extent-width-input").value;
       let extentHeight = document.getElementById("extent-height-input").value;
       let extentBackground = document.getElementById("extent-background-input").value;
@@ -556,6 +633,18 @@
 
       if (page.grayscale) {
         command += ' -type GrayScale';
+      }
+
+      if (page.normalize) {
+        command += ' -normalize';
+      }
+
+      if (page.level) {
+        command += ' -level ' + levelValue;
+      }
+
+      if (page.gamma) {
+        command += ' -gamma ' + gammaValue;
       }
 
       if (page.extent) {
@@ -637,19 +726,34 @@
       progress.hide();
     }, false);
 
-    document.getElementById('grayscale-button').onclick = () => {
-      book.getPages().forEach((p) => p.grayscale = true);
-
+    let reloadCurrentPreview = () => {
       let leftPageWrap = document.getElementById("left-page-wrap");
       let rightPageWrap = document.getElementById("right-page-wrap");
       let elm = Array.from(leftPageWrap.getElementsByTagName('img')).concat(
         Array.from(rightPageWrap.getElementsByTagName('img')));
       if (elm.length > 0) {
         thumbnailClicked(book.getPages().find((p) => p.optimizedId == elm[0].id));
-
-        document.getElementById('grayscale-button').innerHTML = 
-          '全て"グレースケール"にする <i class="bi bi-check-square"></i>';
       }
+    }
+
+    document.getElementById('grayscale-button').onclick = () => {
+      book.getPages().forEach((p) => p.grayscale = true);
+      reloadCurrentPreview();
+    }
+
+    document.getElementById('normalize-button').onclick = () => {
+      book.getPages().forEach((p) => p.normalize = true);
+      reloadCurrentPreview();
+    }
+
+    document.getElementById('level-button').onclick = () => {
+      book.getPages().forEach((p) => p.level = true);
+      reloadCurrentPreview();
+    }
+
+    document.getElementById('gamma-button').onclick = () => {
+      book.getPages().forEach((p) => p.gamma = true);
+      reloadCurrentPreview();
     }
 
     document.getElementById('extent-button').onclick = () => {
