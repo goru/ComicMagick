@@ -26,4 +26,4 @@ ARG EMCC_LDFLAGS="-s INVOKE_RUN=0 -s MODULARIZE=1 -s EXPORT_NAME=Magick -s EXTRA
 ENV LDFLAGS="$IMAGE_MAGICK_LDFLAGS $EMCC_LDFLAGS"
 RUN cd ImageMagick && mkdir wasm && ./libtool --silent --tag=CC --mode=link emcc $LDFLAGS -o wasm/magick.js utilities/magick.o MagickCore/libMagickCore-*.la MagickWand/libMagickWand-*.la
 
-ENTRYPOINT (cd ImageMagick/utilities; python3 -m http.server 80)
+CMD (cd ImageMagick/utilities; python3 -m http.server 80)
