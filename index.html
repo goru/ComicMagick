@@ -314,6 +314,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.6.0/dist/jszip.min.js"></script>
+  <script src="build/ImageMagick/magick.js"></script>
   <script type='module'>
     import { execute } from 'https://cdn.jsdelivr.net/npm/wasm-imagemagick/dist/bundles/magickApi.js';
 
@@ -512,7 +513,21 @@
       }
     }
 
+    class MagickObject {
+      constructor() {
+        this.magick = undefined;
+      }
+
+      async get() {
+        if (this.magick == undefined) {
+          this.magick = await Magick();
+        }
+        return this.magick;
+      }
+    }
+
     let book = new Book();
+    let magick = new MagickObject();
 
     let thumbnailClicked = async (page) => {
       book.getPages().forEach((p) => p.switchBorderStyle(false));
